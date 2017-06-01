@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name" translatable="false">Baking App</string>
+    <string name="title_recipe_detail">Recipe Detail</string>
+    <string name="title_recipe_step">Recipe Steps</string>
+    <string name="toast_no_network">NO NETWORK YET</string>
+
+    <!--Image descriptions-->
+    <string name="recipe_image_description">Recipe</string>
+    <string name="recipe_favorite_description">Mark as favorite</string>
+    <string name="recipe_share_description">Share recipe</string>
+    <string name="right_nav_description">Go to next step</string>
+    <string name="left_nav_description">Go to previous step</string>
+
+    <string name="step_intent_key" translatable="false">step_intent</string>
+
+    <string name="left_nav_text">Back</string>
+    <string name="right_nav_text">Next</string>
+
+</resources>

@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.example.phenomenon.bakingapp.RecipeStepNavFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:id="@+id/right_nav"
+        android:background="@drawable/circle"
+        android:text="@string/right_nav_text"
+        android:textColor="@color/colorAccent"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:contentDescription="@string/right_nav_description"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:background="@drawable/circle"
+        android:text="@string/left_nav_text"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/left_nav"
+        android:drawableStart="@drawable/ic_chevron_left_black_24dp"
+        android:contentDescription="@string/left_nav_description"/>
+
+</FrameLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="5dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:paddingBottom="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="1dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:background="@color/cardview_dark_background"
+                android:visibility="visible"
+                android:id="@+id/recipe_list_image"
+                android:contentDescription="@string/recipe_image_description"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:id="@+id/recipe_list_text"
+                android:layout_below="@+id/recipe_list_image"
+                style="@style/CardLook"
+                tools:text="TEST" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_favorite_border_black_24dp"
+                android:id="@+id/recipe_list_favorite"
+                android:layout_below="@+id/recipe_list_text"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/recipe_list_share"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/recipe_favorite_description"/>
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/circle"
+                android:id="@+id/recipe_list_share"
+                android:layout_below="@+id/recipe_list_text"
+                android:drawableTop="@drawable/ic_share_black_24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/recipe_share_description"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
