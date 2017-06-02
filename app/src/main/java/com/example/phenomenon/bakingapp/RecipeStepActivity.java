@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 
@@ -49,6 +50,9 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        if (getSupportActionBar()!=null)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         if (getIntent().hasExtra(getString(R.string.step_intent_key))){
             recipe= getIntent().getParcelableExtra(getString(R.string.step_intent_key));
@@ -72,7 +76,7 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
 
     @Override
     public void onClick(Step step, int index) {
-        Toast.makeText(this, "click, index: "+ index, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "click, index: "+ index, Toast.LENGTH_SHORT).show();
         if (mTwoPane) {
             Bundle arguments = new Bundle();
             arguments.putString(RecipeStepVideoFragment.ARG_ITEM_ID, String.valueOf(step.getId()));
@@ -106,5 +110,13 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
         }
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            navigateUpTo(new Intent(this, RecipeListActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

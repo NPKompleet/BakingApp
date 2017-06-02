@@ -42,7 +42,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
 
             steps= getIntent().getParcelableArrayListExtra("steps");
             index= getIntent().getIntExtra("index", 0);
-            Toast.makeText(this, "put index: "+index, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "put index: "+index, Toast.LENGTH_SHORT).show();
             Step step= steps.get(index);
 
             Bundle instArguments = new Bundle();
@@ -70,7 +70,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            navigateUpTo(new Intent(this, RecipeListActivity.class));
+            navigateUpTo(new Intent(this, RecipeStepActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -2,7 +2,14 @@
     <string name="app_name" translatable="false">Baking App</string>
     <string name="title_recipe_detail">Recipe Detail</string>
     <string name="title_recipe_step">Recipe Steps</string>
-    <string name="toast_no_network">NO NETWORK YET</string>
+
+    <string name="toast_no_network">NO NETWORK YET\n Please connect to the internet</string>
+    <string name="toast_connecting">Fetching some delicious recipes.....</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="load_finished">Loading completed</string>
+    <string name="recipe_selected">" selected"</string>
+    <string name="no_data">No data to load</string>
+    <string name="network_restored">Network connection available</string>
 
     <!--Image descriptions-->
     <string name="recipe_image_description">Recipe</string>

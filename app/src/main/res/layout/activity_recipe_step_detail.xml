@@ -17,13 +17,14 @@
         android:layout_height="200dp" />
 
     <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nav_fragment" />
+
+    <FrameLayout
         android:id="@+id/step_detail_instruction_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/nav_fragment" />
 
 </LinearLayout>
