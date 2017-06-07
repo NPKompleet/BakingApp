@@ -1,19 +1,29 @@
 package com.example.phenomenon.bakingapp;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 
+import com.example.phenomenon.bakingapp.pojo.Ingredient;
 import com.example.phenomenon.bakingapp.pojo.Recipe;
 import com.example.phenomenon.bakingapp.pojo.Step;
+import com.example.phenomenon.bakingapp.provider.RecipeContract;
+import com.example.phenomenon.bakingapp.provider.RecipeProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.phenomenon.bakingapp.RecipeListActivity.favoriteRecipe;
 
 /**
  * An activity representing a list of Recipes. This activity
@@ -30,6 +40,9 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     Recipe recipe;
 
@@ -70,6 +83,53 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
         // activity should be in two-pane mode.
         mTwoPane = getResources().getBoolean(R.bool.two_pane);
 
+        if (recipe.getName().equals(favoriteRecipe)){
+            fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+        }
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentResolver resolver= getContentResolver();
+
+                if (recipe.getName().equals(favoriteRecipe)){
+                    fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    Toast.makeText(RecipeStepActivity.this, recipe.getName()+ " is no longer a favorite", Toast.LENGTH_SHORT).show();
+                    String[] selectArgs= {recipe.getName()};
+                    resolver.delete(RecipeProvider.Ingredients.CONTENT_URI, RecipeContract.COLUMN_RECIPE + "=?", selectArgs);
+                    favoriteRecipe = "";
+
+                    //refresh the widget
+                    FavoriteRecipeWidget.sendRefreshBroadcast(RecipeStepActivity.this);
+
+                } else {
+                    if (!favoriteRecipe.equals("")) {
+                        String[] selectArgs = {favoriteRecipe};
+                        resolver.delete(RecipeProvider.Ingredients.CONTENT_URI, RecipeContract.COLUMN_RECIPE + "=?", selectArgs);
+                        Toast.makeText(RecipeStepActivity.this, favoriteRecipe + " is no longer a favorite", Toast.LENGTH_SHORT).show();
+                    }
+
+                    for (Ingredient ingredient : recipe.getIngredients()) {
+                        ContentValues cv = new ContentValues();
+                        cv.put(RecipeContract.COLUMN_RECIPE, recipe.getName());
+                        cv.put(RecipeContract.COLUMN_INGREDIENT, ingredient.getIngredientName());
+                        cv.put(RecipeContract.COLUMN_QUANTITY, ingredient.getQuantity());
+                        cv.put(RecipeContract.COLUMN_MEASURE, ingredient.getMeasure());
+
+                        resolver.insert(RecipeProvider.Ingredients.CONTENT_URI, cv);
+                    }
+
+                    fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    favoriteRecipe= recipe.getName();
+                    Toast.makeText(RecipeStepActivity.this, recipe.getName()+ "is new favorite", Toast.LENGTH_SHORT).show();
+
+                    //refresh the widget
+                    FavoriteRecipeWidget.sendRefreshBroadcast(RecipeStepActivity.this);
+                }
+
+            }
+        });
+
     }
 
 
@@ -99,12 +159,10 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
         } else {
             Intent intent = new Intent(this, RecipeStepDetailActivity.class);
             intent.putExtra(RecipeStepVideoFragment.ARG_ITEM_ID, String.valueOf(step.getId()));
-            //Bundle bundle= new Bundle();
-            //bundle.putParcelableArrayList("steps", recipe.getSteps());
+
             intent.putParcelableArrayListExtra("steps", recipe.getSteps());
-            //bundle.putInt("index", index);
+
             intent.putExtra("index", index);
-            //intent.putExtra("bundle", bundle);
 
             startActivity(intent);
         }

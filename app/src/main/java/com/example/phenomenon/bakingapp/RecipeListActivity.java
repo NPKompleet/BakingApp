@@ -3,6 +3,7 @@ package com.example.phenomenon.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.LoaderManager;
@@ -19,12 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.phenomenon.bakingapp.pojo.Recipe;
+import com.example.phenomenon.bakingapp.provider.RecipeContract;
+import com.example.phenomenon.bakingapp.provider.RecipeProvider;
 import com.example.phenomenon.bakingapp.utils.NetworkBroadcastReceiver;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.phenomenon.bakingapp.FavoriteRecipeWidget.sendRefreshBroadcast;
 
 public class RecipeListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>>, RecipeListAdapter.RecipeClickHandler,
@@ -46,6 +51,8 @@ public class RecipeListActivity extends AppCompatActivity
     ArrayList<Recipe> recipes= new ArrayList<>();
     private boolean receiver_registered= false;
 
+    public static String favoriteRecipe= "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,38 +70,38 @@ public class RecipeListActivity extends AppCompatActivity
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        onRefresh();
-
-    }
-
-    @Override
-    public Loader<ArrayList<Recipe>> onCreateLoader(int id, Bundle args) {
-        return new RecipeListLoader(this);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> data) {
-        if (data==null) {
-            Toast.makeText(this, getString(R.string.no_data), Toast.LENGTH_SHORT).show();
-            return;
+        if (savedInstanceState!= null){
+            recipes= savedInstanceState.getParcelableArrayList("list");
+            mAdapter.swapData(recipes);
+        }else {
+            getFavoriteRecipe();
+            onRefresh();
         }
-        Toast.makeText(this, getString(R.string.load_finished), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, data.get(0).getName(), Toast.LENGTH_SHORT).show();
-        mAdapter.swapData(data);
-        swipeRefreshLayout.setRefreshing(false);
-        errorTV.setVisibility(View.GONE);
-        if (receiver_registered) this.unregisterReceiver(mReceiver);
-        receiver_registered=false;
+
+
+    }
+
+    private void getFavoriteRecipe(){
+        //String[] projection= {RecipeContract.COLUMN_RECIPE};
+        int qua=0;
+        String ing= "";
+        Cursor c=  getContentResolver().query(RecipeProvider.Ingredients.CONTENT_URI, null, null, null, null);
+        if (c != null && c.moveToFirst()) {
+            favoriteRecipe = c.getString(c.getColumnIndex(RecipeContract.COLUMN_RECIPE));
+            ing= c.getString(c.getColumnIndex(RecipeContract.COLUMN_INGREDIENT));
+            qua= c.getInt(c.getColumnIndex(RecipeContract.COLUMN_QUANTITY));
+            c.close();
+        }
+
+        Toast.makeText(this, "fav: "+favoriteRecipe+ " ing: "+ ing + " qua "+qua, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<Recipe>> loader) {
-
+    protected void onSaveInstanceState(Bundle bundle){
+        super.onSaveInstanceState(bundle);
+        bundle.putParcelableArrayList("list", recipes);
     }
 
-    public void initLoader(){
-        getSupportLoaderManager().initLoader(RECIPE_LIST_LOADER, null, this).forceLoad();
-    }
 
     @Override
     /**
@@ -123,6 +130,37 @@ public class RecipeListActivity extends AppCompatActivity
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
+
+    public void initLoader(){
+        getSupportLoaderManager().initLoader(RECIPE_LIST_LOADER, null, this).forceLoad();
+    }
+
+
+    @Override
+    public Loader<ArrayList<Recipe>> onCreateLoader(int id, Bundle args) {
+        return new RecipeListLoader(this);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Recipe>> loader, ArrayList<Recipe> data) {
+        if (data==null) {
+            Toast.makeText(this, getString(R.string.no_data), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(this, getString(R.string.load_finished), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, data.get(0).getName(), Toast.LENGTH_SHORT).show();
+        mAdapter.swapData(data);
+        swipeRefreshLayout.setRefreshing(false);
+        errorTV.setVisibility(View.GONE);
+        if (receiver_registered) this.unregisterReceiver(mReceiver);
+        receiver_registered=false;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Recipe>> loader) {
+
+    }
+
 
     @Override
     public void onClickRecipe(Recipe recipe) {

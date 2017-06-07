@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.phenomenon.bakingapp.RecipeListActivity.favoriteRecipe;
+
 /**
  * Created by PHENOMENON on 5/26/2017.
  */
@@ -55,10 +57,15 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         Recipe recipe= myRecipes.get(position);
         holder.name.setText(recipe.getName());
         //set the image resource if url is provided
-        if (position==2) recipe.setImage("http://i.imgur.com/DvpvklR.png");
         if (recipe.getImage() != null && !recipe.getImage().equals(""))
         {
             Picasso.with(context).load(recipe.getImage()).into(holder.imageView);
+        }
+
+        if (recipe.getName().equals(favoriteRecipe)){
+            holder.favView.setImageResource(R.drawable.ic_favorite_orange_24dp);
+        }else{
+            holder.favView.setImageResource(R.drawable.ic_favorite_border_orange_24dp);
         }
     }
 
@@ -73,6 +80,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         @BindView(R.id.recipe_list_image)
         ImageView imageView;
+
+        @BindView(R.id.recipe_list_favorite)
+        ImageView favView;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);

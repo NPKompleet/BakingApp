@@ -24,8 +24,8 @@
         <activity
             android:name=".RecipeStepActivity"
             android:label="@string/title_recipe_step"
-            android:parentActivityName=".RecipeListActivity"
             android:launchMode="singleTop"
+            android:parentActivityName=".RecipeListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -39,6 +39,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.phenomenon.bakingapp.RecipeStepActivity" />
         </activity>
+
+        <provider
+            android:name=".provider.generated.RecipeProvider"
+            android:authorities="com.example.phenomenon.bakingapp.provider.authority"
+            android:exported="false" />
+
+        <receiver android:name=".FavoriteRecipeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/favorite_recipe_widget_info" />
+        </receiver>
+
+        <service android:name="com.example.phenomenon.bakingapp.FavoriteRecipeWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
     </application>
 
 </manifest>
