@@ -7,7 +7,7 @@ import android.os.Binder;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.Toast;
+
 
 import com.example.phenomenon.bakingapp.provider.RecipeContract;
 import com.example.phenomenon.bakingapp.provider.RecipeProvider;
@@ -22,7 +22,7 @@ public class FavoriteRecipeRemoteViewFactory implements RemoteViewsService.Remot
     private Context mContext;
     private Cursor mCursor;
 
-    public FavoriteRecipeRemoteViewFactory(Context context, Intent intent){
+    public FavoriteRecipeRemoteViewFactory(Context context){
         mContext = context;
     }
 

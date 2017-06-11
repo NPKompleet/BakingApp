@@ -17,11 +17,8 @@ public class FavoriteRecipeWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-        //CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.favorite_recipe_widget);
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
 
         //set the name of the recipe in the widget to the favorite recipe in The main activity
         views.setTextViewText(R.id.widget_title, favoriteRecipe);
@@ -35,6 +32,8 @@ public class FavoriteRecipeWidget extends AppWidgetProvider {
         //set
         views.setOnClickPendingIntent(R.id.widget_title_bar, pendingIntent);
         views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
+
+        //int[] appWidgetIds= appWidgetManager.getAppWidgetIds(new)
 
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listview);
 

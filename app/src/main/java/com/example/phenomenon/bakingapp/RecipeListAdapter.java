@@ -1,6 +1,7 @@
 package com.example.phenomenon.bakingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.phenomenon.bakingapp.pojo.Ingredient;
 import com.example.phenomenon.bakingapp.pojo.Recipe;
 import com.squareup.picasso.Picasso;
 
@@ -54,7 +56,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
-        Recipe recipe= myRecipes.get(position);
+        final Recipe recipe= myRecipes.get(position);
         holder.name.setText(recipe.getName());
         //set the image resource if url is provided
         if (recipe.getImage() != null && !recipe.getImage().equals(""))
@@ -67,6 +69,21 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         }else{
             holder.favView.setImageResource(R.drawable.ic_favorite_border_orange_24dp);
         }
+
+        holder.shareView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent share= new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                String text= "Ingredients for "+ recipe.getName()+"\n"
+                        +"______________________________________" +"\n";
+                for (Ingredient ing : recipe.getIngredients()){
+
+                }
+                share.putExtra(Intent.EXTRA_TEXT, text);
+                context.startActivity(share);
+            }
+        });
     }
 
     @Override
@@ -83,6 +100,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         @BindView(R.id.recipe_list_favorite)
         ImageView favView;
+
+        @BindView(R.id.recipe_list_share)
+        ImageView shareView;
 
         public RecipeViewHolder(View itemView) {
             super(itemView);

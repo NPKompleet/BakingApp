@@ -24,6 +24,8 @@ public class RecipeListLoader extends AsyncTaskLoader<ArrayList<Recipe>> {
     public ArrayList<Recipe> loadInBackground() {
         return NetworkUtil.fetchData();
     }
+
+
 }
 
 
