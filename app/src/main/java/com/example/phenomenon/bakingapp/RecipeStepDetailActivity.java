@@ -1,16 +1,18 @@
 package com.example.phenomenon.bakingapp;
 
-import android.content.Intent;
+
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
 
 import com.example.phenomenon.bakingapp.pojo.Step;
 
 import java.util.ArrayList;
+
+import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
 public class RecipeStepDetailActivity extends AppCompatActivity implements RecipeStepNavFragment.OnNavButtonClickListener {
     ArrayList<Step> steps;
@@ -31,8 +33,8 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(RecipeStepVideoFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(RecipeStepVideoFragment.ARG_ITEM_ID));
+            arguments.putParcelable(RecipeStepVideoFragment.VIDEO_URL,
+                    getIntent().getParcelableExtra(getString(R.string.step_detail_intent_key)));
             RecipeStepVideoFragment fragment = new RecipeStepVideoFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -42,11 +44,11 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
 
             steps= getIntent().getParcelableArrayListExtra("steps");
             index= getIntent().getIntExtra("index", 0);
-            //Toast.makeText(this, "put index: "+index, Toast.LENGTH_SHORT).show();
+
             Step step= steps.get(index);
 
             Bundle instArguments = new Bundle();
-            instArguments.putString(RecipeStepInstructionFragment.ARG_PARAM, step.getDescription());
+            instArguments.putString(RecipeStepInstructionFragment.INSTRUCTION, step.getDescription());
             RecipeStepInstructionFragment iFragment = new RecipeStepInstructionFragment();
             iFragment.setArguments(instArguments);
             getSupportFragmentManager().beginTransaction()
@@ -54,8 +56,8 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
                     .commit();
 
             Bundle navArguments = new Bundle();
-            navArguments.putInt(RecipeStepNavFragment.ARG_PARAM1, index);
-            navArguments.putInt(RecipeStepNavFragment.ARG_PARAM2, steps.size()-1);
+            navArguments.putInt(RecipeStepNavFragment.INDEX_PARAM, index);
+            navArguments.putInt(RecipeStepNavFragment.MAX_INDEX_PARAM, steps.size()-1);
             RecipeStepNavFragment navFragment = new RecipeStepNavFragment();
             navFragment.setArguments(navArguments);
             getSupportFragmentManager().beginTransaction()
@@ -70,7 +72,8 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            navigateUpTo(new Intent(this, RecipeStepActivity.class));
+            //navigateUpTo(new Intent(this, RecipeStepActivity.class));
+            navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -93,10 +96,10 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
     }
 
     public void navigateTo(int index){
+        Step step= steps.get(index);
         Bundle arguments = new Bundle();
-        /*arguments.putString(RecipeStepVideoFragment.ARG_ITEM_ID,
-                getIntent().getStringExtra(RecipeStepVideoFragment.ARG_ITEM_ID));*/
-        arguments.putString(RecipeStepVideoFragment.ARG_ITEM_ID, String.valueOf(steps.get(index).getId()));
+
+        arguments.putParcelable(RecipeStepVideoFragment.VIDEO_URL, step);
         RecipeStepVideoFragment fragment = new RecipeStepVideoFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
@@ -104,13 +107,8 @@ public class RecipeStepDetailActivity extends AppCompatActivity implements Recip
                 .commit();
 
 
-        /*steps= getIntent().getParcelableArrayListExtra("steps");
-        index= getIntent().getIntExtra("index", 0);*/
-        Toast.makeText(this, "put index: "+index, Toast.LENGTH_SHORT).show();
-        Step step= steps.get(index);
-
         Bundle instArguments = new Bundle();
-        instArguments.putString(RecipeStepInstructionFragment.ARG_PARAM, step.getDescription());
+        instArguments.putString(RecipeStepInstructionFragment.INSTRUCTION, step.getDescription());
         RecipeStepInstructionFragment iFragment = new RecipeStepInstructionFragment();
         iFragment.setArguments(instArguments);
         getSupportFragmentManager().beginTransaction()

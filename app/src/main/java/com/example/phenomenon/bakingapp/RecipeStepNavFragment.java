@@ -7,12 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.example.phenomenon.bakingapp.RecipeStepDetailActivity.index;
 
 public class RecipeStepNavFragment extends Fragment {
 
@@ -22,11 +19,11 @@ public class RecipeStepNavFragment extends Fragment {
     @BindView(R.id.right_nav)
     TextView right_nav;
 
-    public static final String ARG_PARAM1 = "param1";
-    public static final String ARG_PARAM2 = "param2";
+    public static final String INDEX_PARAM = "index";
+    public static final String MAX_INDEX_PARAM = "max";
 
-    private int mParam1;
-    private int mParam2;
+    private int index;
+    private int maxIndex;
 
 
     private OnNavButtonClickListener mListener;
@@ -45,22 +42,21 @@ public class RecipeStepNavFragment extends Fragment {
 
 
 
- /*   public static RecipeStepNavFragment newInstance(int param1, int param2) {
-        RecipeStepNavFragment fragment = new RecipeStepNavFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
-        args.putInt(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getInt(ARG_PARAM1);
-            mParam2 = getArguments().getInt(ARG_PARAM2);
+            index = getArguments().getInt(INDEX_PARAM);
+            maxIndex = getArguments().getInt(MAX_INDEX_PARAM);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(INDEX_PARAM, index);
+        outState.putInt(MAX_INDEX_PARAM, maxIndex);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -69,29 +65,29 @@ public class RecipeStepNavFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_recipe_step_nav, container, false);
         ButterKnife.bind(this, rootView);
-        Toast.makeText(getContext(), "frag_index: "+ mParam1, Toast.LENGTH_SHORT).show();
-        
+
+        if (savedInstanceState != null){
+            index= savedInstanceState.getInt(INDEX_PARAM);
+            maxIndex= savedInstanceState.getInt(MAX_INDEX_PARAM);
+        }
 
         
         right_nav.setOnClickListener(navClickListener);
         left_nav.setOnClickListener(navClickListener);
         
-        if (mParam1==mParam2) right_nav.setVisibility(View.INVISIBLE);
-        if (mParam1==0) left_nav.setVisibility(View.INVISIBLE);
+        if (index == maxIndex) right_nav.setVisibility(View.INVISIBLE);
+        if (index ==0) left_nav.setVisibility(View.INVISIBLE);
         return rootView;
     }
 
     public void onNavClicked() {
-        /*if (mListener != null) {
-            mListener.onNavClicked();
-        }*/
-        if (index!=0) {
+        if (RecipeStepDetailActivity.index !=0) {
             left_nav.setVisibility(View.VISIBLE);
         }else{
             left_nav.setVisibility(View.INVISIBLE);
         }
 
-        if (index!=mParam2){
+        if (RecipeStepDetailActivity.index != maxIndex){
             right_nav.setVisibility(View.VISIBLE);
         } else{
             right_nav.setVisibility(View.INVISIBLE);

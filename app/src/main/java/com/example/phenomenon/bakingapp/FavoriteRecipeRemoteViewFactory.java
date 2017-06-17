@@ -2,6 +2,7 @@ package com.example.phenomenon.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Binder;
 import android.widget.AdapterView;
@@ -14,8 +15,12 @@ import com.example.phenomenon.bakingapp.provider.RecipeProvider;
 
 import java.util.HashMap;
 
+import static com.example.phenomenon.bakingapp.RecipeStepActivity.FAVORITE_RECIPE;
+import static com.example.phenomenon.bakingapp.RecipeStepActivity.RECIPE_PREF;
+
 /**
  * Created by PHENOMENON on 6/6/2017.
+ *
  */
 
 public class FavoriteRecipeRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory{
@@ -47,6 +52,7 @@ public class FavoriteRecipeRemoteViewFactory implements RemoteViewsService.Remot
 
     @Override
     public void onCreate() {
+
         initCursor();
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -56,6 +62,14 @@ public class FavoriteRecipeRemoteViewFactory implements RemoteViewsService.Remot
 
     @Override
     public void onDataSetChanged() {
+
+        /*//retrieve favorite from Shared Preferences
+        SharedPreferences sharedPref = mContext.getSharedPreferences(RECIPE_PREF, Context.MODE_PRIVATE);
+
+        //set the name of the recipe in the widget to the favorite recipe in The main activity
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.favorite_recipe_widget);
+        views.setTextViewText(R.id.widget_title, sharedPref.getString(FAVORITE_RECIPE, ""));*/
+
         initCursor();
     }
 

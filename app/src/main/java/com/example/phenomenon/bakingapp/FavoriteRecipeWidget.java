@@ -6,9 +6,12 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
 import static com.example.phenomenon.bakingapp.RecipeListActivity.favoriteRecipe;
+import static com.example.phenomenon.bakingapp.RecipeStepActivity.FAVORITE_RECIPE;
+import static com.example.phenomenon.bakingapp.RecipeStepActivity.RECIPE_PREF;
 
 /**
  * Implementation of App Widget functionality.
@@ -20,8 +23,11 @@ public class FavoriteRecipeWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.favorite_recipe_widget);
 
+        //retrieve favorite from Shared Preferences
+        SharedPreferences sharedPref = context.getSharedPreferences(RECIPE_PREF, Context.MODE_PRIVATE);
+
         //set the name of the recipe in the widget to the favorite recipe in The main activity
-        views.setTextViewText(R.id.widget_title, favoriteRecipe);
+        views.setTextViewText(R.id.widget_title, sharedPref.getString(FAVORITE_RECIPE, ""));
         views.setRemoteAdapter(R.id.listview, new Intent(context, FavoriteRecipeWidgetService.class));
         views.setEmptyView(R.id.listview, R.id.appwidget_text);
 

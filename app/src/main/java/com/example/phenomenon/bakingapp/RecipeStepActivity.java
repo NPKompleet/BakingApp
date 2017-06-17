@@ -3,9 +3,10 @@ package com.example.phenomenon.bakingapp;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import com.example.phenomenon.bakingapp.provider.RecipeProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 import static com.example.phenomenon.bakingapp.RecipeListActivity.favoriteRecipe;
 
 /**
@@ -45,6 +47,9 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
     FloatingActionButton fab;
 
     Recipe recipe;
+
+    public static final String RECIPE_PREF= "Recipe_Pref";
+    public static final String FAVORITE_RECIPE= "Fav_Recipe";
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -87,10 +92,14 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
             fab.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
 
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ContentResolver resolver= getContentResolver();
+                SharedPreferences sharedPreferences= getSharedPreferences(RECIPE_PREF, MODE_PRIVATE);
+                SharedPreferences.Editor editor= sharedPreferences.edit();
 
                 if (recipe.getName().equals(favoriteRecipe)){
                     fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
@@ -98,6 +107,9 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
                     String[] selectArgs= {recipe.getName()};
                     resolver.delete(RecipeProvider.Ingredients.CONTENT_URI, RecipeContract.COLUMN_RECIPE + "=?", selectArgs);
                     favoriteRecipe = "";
+
+                    editor.putString(FAVORITE_RECIPE, favoriteRecipe);
+                    editor.apply();
 
                     //refresh the widget
                     FavoriteRecipeWidget.sendRefreshBroadcast(RecipeStepActivity.this);
@@ -107,6 +119,7 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
                         String[] selectArgs = {favoriteRecipe};
                         resolver.delete(RecipeProvider.Ingredients.CONTENT_URI, RecipeContract.COLUMN_RECIPE + "=?", selectArgs);
                         Toast.makeText(RecipeStepActivity.this, favoriteRecipe + " is no longer a favorite", Toast.LENGTH_SHORT).show();
+
                     }
 
                     for (Ingredient ingredient : recipe.getIngredients()) {
@@ -121,7 +134,10 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
 
                     fab.setImageResource(R.drawable.ic_favorite_black_24dp);
                     favoriteRecipe= recipe.getName();
-                    Toast.makeText(RecipeStepActivity.this, recipe.getName()+ "is new favorite", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecipeStepActivity.this, recipe.getName()+ " is new favorite", Toast.LENGTH_SHORT).show();
+
+                    editor.putString(FAVORITE_RECIPE, favoriteRecipe);
+                    editor.commit();
 
                     //refresh the widget
                     FavoriteRecipeWidget.sendRefreshBroadcast(RecipeStepActivity.this);
@@ -139,7 +155,7 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
         //Toast.makeText(this, "click, index: "+ index, Toast.LENGTH_SHORT).show();
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString(RecipeStepVideoFragment.ARG_ITEM_ID, String.valueOf(step.getId()));
+            arguments.putParcelable(RecipeStepVideoFragment.VIDEO_URL, step);
             RecipeStepVideoFragment fragment = new RecipeStepVideoFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -148,7 +164,7 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
 
 
             Bundle instArguments = new Bundle();
-            instArguments.putString(RecipeStepInstructionFragment.ARG_PARAM, step.getDescription());
+            instArguments.putString(RecipeStepInstructionFragment.INSTRUCTION, step.getDescription());
             RecipeStepInstructionFragment iFragment = new RecipeStepInstructionFragment();
             iFragment.setArguments(instArguments);
             getSupportFragmentManager().beginTransaction()
@@ -158,7 +174,7 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
 
         } else {
             Intent intent = new Intent(this, RecipeStepDetailActivity.class);
-            intent.putExtra(RecipeStepVideoFragment.ARG_ITEM_ID, String.valueOf(step.getId()));
+            intent.putExtra(getString(R.string.step_detail_intent_key), step);
 
             intent.putParcelableArrayListExtra("steps", recipe.getSteps());
 
@@ -171,7 +187,8 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            navigateUpTo(new Intent(this, RecipeListActivity.class));
+            //navigateUpTo(new Intent(this, RecipeListActivity.class));
+            navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

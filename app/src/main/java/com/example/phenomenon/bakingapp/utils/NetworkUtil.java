@@ -5,6 +5,9 @@ package com.example.phenomenon.bakingapp.utils;
 import com.example.phenomenon.bakingapp.pojo.Ingredient;
 import com.example.phenomenon.bakingapp.pojo.Recipe;
 import com.example.phenomenon.bakingapp.pojo.Step;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,6 +25,7 @@ import okhttp3.Response;
 
 /**
  * Created by PHENOMENON on 5/26/2017.
+ *
  */
 
 public  class NetworkUtil {
@@ -43,13 +48,20 @@ public  class NetworkUtil {
     {
         String path= "http://go.udacity.com/android-baking-app-json";
         String data= null;
-        ArrayList<Recipe> Recipes= new ArrayList<>();
+        ArrayList<Recipe> recipes;
 
         try{
             data= run(path);
         } catch (IOException e){
             e.printStackTrace();
         }
+
+
+        Gson gson= new GsonBuilder().create();
+        //recipes= (ArrayList<Recipe>) Arrays.asList(gson.fromJson(data, Recipe[].class));
+        recipes= gson.fromJson(data, new TypeToken<ArrayList<Recipe>>(){}.getType());
+
+        /*
 
         //Use a JSON array since expected response is the form of a JSON Array
         JSONArray jData= null;
@@ -97,13 +109,13 @@ public  class NetworkUtil {
 
                 Recipe recipe= new Recipe(id, name, ingredientList, stepList, servings, image);
                 //add each recipe to the list of recipes
-                Recipes.add(recipe);
+                recipes.add(recipe);
 
             }
         }catch (JSONException e){
             e.printStackTrace();
         }
-
-        return Recipes;
+*/
+        return recipes;
     }
 }

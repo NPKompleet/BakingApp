@@ -3,16 +3,21 @@ package com.example.phenomenon.bakingapp.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by PHENOMENON on 5/25/2017.
+ *
  */
 
 public class Ingredient implements Parcelable{
-    private int quantity;
+    private float quantity;
     private String measure;
+
+    @SerializedName("ingredient")
     private String ingredientName;
 
-    public Ingredient(int quantity, String measure, String ingredientName){
+    public Ingredient(float quantity, String measure, String ingredientName){
         this.quantity= quantity;
         this.measure= measure;
         this.ingredientName= ingredientName;
@@ -20,7 +25,7 @@ public class Ingredient implements Parcelable{
 
 
     protected Ingredient(Parcel in) {
-        quantity = in.readInt();
+        quantity = in.readFloat();
         measure = in.readString();
         ingredientName = in.readString();
     }
@@ -46,7 +51,7 @@ public class Ingredient implements Parcelable{
 
 
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
@@ -73,7 +78,7 @@ public class Ingredient implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(quantity);
+        dest.writeFloat(quantity);
         dest.writeString(measure);
         dest.writeString(ingredientName);
     }

@@ -3,6 +3,7 @@ package com.example.phenomenon.bakingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,6 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.phenomenon.bakingapp.FavoriteRecipeWidget.sendRefreshBroadcast;
+import static com.example.phenomenon.bakingapp.RecipeStepActivity.FAVORITE_RECIPE;
+import static com.example.phenomenon.bakingapp.RecipeStepActivity.RECIPE_PREF;
 
 public class RecipeListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<ArrayList<Recipe>>, RecipeListAdapter.RecipeClickHandler,
@@ -84,7 +87,7 @@ public class RecipeListActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         if(getResources().getBoolean(R.bool.two_pane)){
-            mRecipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            mRecipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         }else {
             mRecipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         }
@@ -116,14 +119,17 @@ public class RecipeListActivity extends AppCompatActivity
     }
 
     private void getFavoriteRecipe(){
-        String[] projection= {RecipeContract.COLUMN_RECIPE};
+       /* String[] projection= {RecipeContract.COLUMN_RECIPE};
         Cursor c=  getContentResolver().query(RecipeProvider.Ingredients.CONTENT_URI, projection, null, null, null);
         if (c != null && c.moveToFirst()) {
             favoriteRecipe = c.getString(c.getColumnIndex(RecipeContract.COLUMN_RECIPE));
             c.close();
-        }
+        }*/
 
-        //Toast.makeText(this, "fav: "+favoriteRecipe+ " ing: "+ ing + " qua "+qua, Toast.LENGTH_SHORT).show();
+        SharedPreferences sharedPref = getSharedPreferences(RECIPE_PREF, Context.MODE_PRIVATE);
+        favoriteRecipe = sharedPref.getString(FAVORITE_RECIPE, "");
+
+        Toast.makeText(this, "fav: "+favoriteRecipe, Toast.LENGTH_SHORT).show();
     }
 
     @Override

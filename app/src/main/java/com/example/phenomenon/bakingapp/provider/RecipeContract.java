@@ -24,7 +24,7 @@ public class RecipeContract {
     @NotNull
     public static final String COLUMN_INGREDIENT= "ingredient";
 
-    @DataType(DataType.Type.INTEGER)
+    @DataType(DataType.Type.REAL)
     @NotNull
     public static final String COLUMN_QUANTITY= "quantity";
 
