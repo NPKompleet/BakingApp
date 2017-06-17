@@ -78,13 +78,6 @@ public class RecipeStepActivityTest {
         }else{
             onView(withId(R.id.rv_recipe_step))
                     .perform(RecyclerViewActions.scrollToPosition(1), click());
-
-            /*intended(allOf(
-                    hasExtraWithKey(activityTestRule.getActivity().getString(R.string.step_detail_intent_key)),
-                    hasExtraWithKey("steps"),
-                    hasExtraWithKey("index"),
-                    isInternal()
-            ));*/
         }
     }
 }

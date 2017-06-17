@@ -62,14 +62,6 @@ public class FavoriteRecipeRemoteViewFactory implements RemoteViewsService.Remot
 
     @Override
     public void onDataSetChanged() {
-
-        /*//retrieve favorite from Shared Preferences
-        SharedPreferences sharedPref = mContext.getSharedPreferences(RECIPE_PREF, Context.MODE_PRIVATE);
-
-        //set the name of the recipe in the widget to the favorite recipe in The main activity
-        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.favorite_recipe_widget);
-        views.setTextViewText(R.id.widget_title, sharedPref.getString(FAVORITE_RECIPE, ""));*/
-
         initCursor();
     }
 
@@ -95,7 +87,7 @@ public class FavoriteRecipeRemoteViewFactory implements RemoteViewsService.Remot
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
 
         rv.setTextViewText(R.id.widget_ingredient, mCursor.getString(0));
-        rv.setTextViewText(R.id.widget_quantity, String.valueOf(mCursor.getInt(1)));
+        rv.setTextViewText(R.id.widget_quantity, String.valueOf(mCursor.getFloat(1)));
 
         rv.setInt(R.id.widget_measure, "setImageResource", getImage(mCursor.getString(2)));
 

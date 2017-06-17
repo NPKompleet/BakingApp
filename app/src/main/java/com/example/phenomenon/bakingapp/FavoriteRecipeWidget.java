@@ -80,7 +80,11 @@ public class FavoriteRecipeWidget extends AppWidgetProvider {
             // refresh all widgets
             AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             ComponentName cn = new ComponentName(context, FavoriteRecipeWidget.class);
-            mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.listview);
+            //mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.listview);
+            int[] appWidgetIds= mgr.getAppWidgetIds(cn);
+            for (int appWidgetId : appWidgetIds) {
+                updateAppWidget(context, mgr, appWidgetId);
+            }
         }
 
         super.onReceive(context, intent);
