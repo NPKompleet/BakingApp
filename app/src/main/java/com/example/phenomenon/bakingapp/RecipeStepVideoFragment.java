@@ -1,6 +1,7 @@
 package com.example.phenomenon.bakingapp;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -251,6 +252,7 @@ public class RecipeStepVideoFragment extends Fragment implements ExoPlayer.Event
                     mExoPlayer.getCurrentPosition(), 1f);
         }
         mMediaSession.setPlaybackState(mStateBuilder.build());
+
 
     }
 

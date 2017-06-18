@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.phenomenon.bakingapp.pojo.Ingredient;
 import com.example.phenomenon.bakingapp.pojo.Recipe;
 import com.example.phenomenon.bakingapp.pojo.Step;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -99,7 +101,12 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 //convert the ViewHolder to a StepViewHolder then set the text
                 position--;
                 RecipeStepHolder stepHolder= (RecipeStepHolder) holder;
-                stepHolder.step.setText(steps.get(position).getShortDescription());
+                Step step= steps.get(position);
+                String url= step.getThumbnailURL();
+                if (!url.equals("")){
+                    Picasso.with(context).load(url).into(stepHolder.imageView);
+                }
+                stepHolder.step.setText(step.getShortDescription());
                 break;
         }
 
@@ -118,6 +125,9 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public class RecipeStepHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.id)
         TextView step;
+
+        @BindView(R.id.step_image)
+        ImageView imageView;
 
         public RecipeStepHolder(View itemView) {
             super(itemView);

@@ -18,6 +18,7 @@
     <string name="right_nav_description">Go to next step</string>
     <string name="left_nav_description">Go to previous step</string>
     <string name="widget_list_image">Measurement</string>
+    <string name="recipe_step_image">Image for recipe step</string>
 
     <string name="step_intent_key" translatable="false">step_intent</string>
     <string name="step_detail_intent_key" translatable="false">step_detail_intent</string>
