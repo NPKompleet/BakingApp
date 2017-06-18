@@ -1,12 +1,16 @@
 package com.example.phenomenon.bakingapp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
@@ -97,12 +101,14 @@ public class RecipeStepVideoFragment extends Fragment implements ExoPlayer.Event
     }
 
 
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(VIDEO_URL, step);
         outState.putLong(VIDEO_POSITION, mExoPlayer.getCurrentPosition());
         super.onSaveInstanceState(outState);
-    }
+    }*/
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,8 +153,8 @@ public class RecipeStepVideoFragment extends Fragment implements ExoPlayer.Event
             initializePlayer(Uri.parse(videoURL));
         }*/
 
-        initializeMediaSession();
-        initializePlayer(Uri.parse(videoURL));
+        //initializeMediaSession();
+        //initializePlayer(Uri.parse(videoURL));
 
         return rootView;
     }
@@ -284,12 +290,26 @@ public class RecipeStepVideoFragment extends Fragment implements ExoPlayer.Event
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializeMediaSession();
+        initializePlayer(Uri.parse(videoURL));
+    }
 
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
         releasePlayer();
         mMediaSession.setActive(false);
+    }
+
+    public class MediaReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            MediaButtonReceiver.handleIntent(mMediaSession, intent);
+        }
     }
 }

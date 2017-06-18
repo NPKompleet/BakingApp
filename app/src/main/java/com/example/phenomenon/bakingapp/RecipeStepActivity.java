@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
@@ -173,7 +174,12 @@ public class RecipeStepActivity extends AppCompatActivity implements RecipeStepA
 
 
         } else {
-            Intent intent = new Intent(this, RecipeStepDetailActivity.class);
+            Intent intent;
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+                intent = new Intent(this, RecipeStepDetailActivity.class);
+            }else{
+                intent = new Intent(this, FullScreenVideoActivity.class);
+            }
             intent.putExtra(getString(R.string.step_detail_intent_key), step);
 
             intent.putParcelableArrayListExtra("steps", recipe.getSteps());
