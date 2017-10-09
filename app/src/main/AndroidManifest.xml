@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.phenomenon.bakingapp">
+    package="com.npkompleet.phenomenon.bakingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/oven_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RecipeListActivity"
+            android:name="com.npkompleet.phenomenon.bakingapp.RecipeListActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop">
             <intent-filter>
@@ -22,33 +22,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RecipeStepActivity"
+            android:name="com.npkompleet.phenomenon.bakingapp.RecipeStepActivity"
             android:label="@string/title_recipe_step"
             android:launchMode="singleTop"
-            android:parentActivityName=".RecipeListActivity"
+            android:parentActivityName="com.npkompleet.phenomenon.bakingapp.RecipeListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.phenomenon.bakingapp.RecipeListActivity" />
+                android:value="com.npkompleet.phenomenon.bakingapp.RecipeListActivity" />
         </activity>
         <activity
-            android:name=".RecipeStepDetailActivity"
+            android:name="com.npkompleet.phenomenon.bakingapp.RecipeStepDetailActivity"
             android:label="@string/title_recipe_detail"
-            android:parentActivityName=".RecipeStepActivity">
+            android:parentActivityName="com.npkompleet.phenomenon.bakingapp.RecipeStepActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.phenomenon.bakingapp.RecipeStepActivity" />
+                android:value="com.npkompleet.phenomenon.bakingapp.RecipeStepActivity" />
         </activity>
 
-        <activity android:name=".FullScreenVideoActivity"
+        <activity android:name="com.npkompleet.phenomenon.bakingapp.FullScreenVideoActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <provider
             android:name=".provider.generated.RecipeProvider"
-            android:authorities="com.example.phenomenon.bakingapp.provider.authority"
+            android:authorities="com.npkompleet.phenomenon.bakingapp.provider.authority"
             android:exported="false" />
 
-        <receiver android:name=".FavoriteRecipeWidget">
+        <receiver android:name="com.npkompleet.phenomenon.bakingapp.FavoriteRecipeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -57,14 +57,14 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/favorite_recipe_widget_info" />
         </receiver>
-        <receiver android:name=".RecipeStepVideoFragment$MediaReceiver">
+        <receiver android:name="com.npkompleet.phenomenon.bakingapp.utils.MediaReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".FavoriteRecipeWidgetService"
+            android:name="com.npkompleet.phenomenon.bakingapp.FavoriteRecipeWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.example.phenomenon.bakingapp.RecipeStepNavFragment">
+    tools:context="com.npkompleet.phenomenon.bakingapp.com.npkompleet.phenomenon.bakingapp.RecipeStepNavFragment">
 
     <TextView
         android:layout_width="wrap_content"

@@ -9,5 +9,5 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.phenomenon.bakingapp.RecipeListActivity"
+    tools:context="com.npkompleet.phenomenon.bakingapp.com.npkompleet.phenomenon.bakingapp.RecipeListActivity"
     tools:listitem="@layout/recipe_step_content" />
